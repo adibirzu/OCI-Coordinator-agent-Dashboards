@@ -1,0 +1,414 @@
+/**
+ * Agent Workflow Graph Styles
+ *
+ * CSS module for the ReactFlow-based agent workflow visualization.
+ * Uses a dark theme consistent with the trace viewer.
+ */
+
+/* Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #1a1a2e;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #16213e;
+    border-bottom: 1px solid #2d3748;
+}
+
+.title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+/* Graph Container */
+.graphContainer {
+    flex: 1;
+    position: relative;
+    min-height: 400px;
+}
+
+/* Stats Bar */
+.statsBar {
+    display: flex;
+    gap: 24px;
+    padding: 12px 16px;
+    background: #0f3460;
+    border-top: 1px solid #2d3748;
+    flex-wrap: wrap;
+}
+
+.statItem {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.statValue {
+    font-size: 16px;
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+.statLabel {
+    font-size: 11px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Custom Workflow Node */
+.workflowNode {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    min-width: 180px;
+    max-width: 260px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.workflowNode:hover {
+    border-color: #4a5568;
+    background: #263448;
+}
+
+.workflowNode.nodeError {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+/* Node type colors - applied via inline styles but using CSS variables */
+.workflowNode[data-type="input"] {
+    border-left: 3px solid #22c55e;
+}
+
+.workflowNode[data-type="output"] {
+    border-left: 3px solid #a855f7;
+}
+
+.workflowNode[data-type="llm_call"] {
+    border-left: 3px solid #3b82f6;
+}
+
+.workflowNode[data-type="tool_invocation"] {
+    border-left: 3px solid #f97316;
+}
+
+.workflowNode[data-type="agent_handoff"] {
+    border-left: 3px solid #eab308;
+}
+
+.workflowNode[data-type="memory_read"],
+.workflowNode[data-type="memory_write"] {
+    border-left: 3px solid #06b6d4;
+}
+
+.workflowNode[data-type="decision"] {
+    border-left: 3px solid #ec4899;
+}
+
+/* Node Icon */
+.nodeIcon {
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 24px;
+    text-align: center;
+}
+
+/* Node Content */
+.nodeContent {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nodeLabel {
+    font-size: 13px;
+    font-weight: 500;
+    color: #e2e8f0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Node Metrics */
+.nodeMetrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.metric {
+    font-size: 11px;
+    color: #94a3b8;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.metric.duration {
+    color: #60a5fa;
+}
+
+.metric.tokens {
+    color: #34d399;
+}
+
+.metric.cost {
+    color: #fbbf24;
+}
+
+.metric.model {
+    color: #a78bfa;
+}
+
+.metric.tool {
+    color: #fb923c;
+}
+
+/* Detail Panel */
+.detailPanel {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 320px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+    max-height: calc(100% - 32px);
+    display: flex;
+    flex-direction: column;
+}
+
+.detailHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #334155;
+}
+
+.detailTitle {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 4px;
+    font-size: 18px;
+    line-height: 1;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+    color: #e2e8f0;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Detail Content */
+.detailContent {
+    padding: 16px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.detailSection {
+    margin-bottom: 16px;
+}
+
+.detailSection:last-child {
+    margin-bottom: 0;
+}
+
+.sectionTitle {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.detailRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.detailRow:last-child {
+    border-bottom: none;
+}
+
+.detailLabel {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.detailValue {
+    font-size: 12px;
+    color: #e2e8f0;
+    font-weight: 500;
+    text-align: right;
+    max-width: 60%;
+    word-break: break-word;
+}
+
+/* View Span Button */
+.viewSpanButton {
+    width: 100%;
+    padding: 10px 16px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    margin-top: 8px;
+}
+
+.viewSpanButton:hover {
+    background: #2563eb;
+}
+
+/* ReactFlow overrides */
+:global(.react-flow__minimap) {
+    background: #1a1a2e !important;
+    border: 1px solid #334155 !important;
+    border-radius: 4px !important;
+}
+
+:global(.react-flow__minimap-mask) {
+    fill: rgba(59, 130, 246, 0.2) !important;
+}
+
+:global(.react-flow__controls) {
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    border-radius: 4px !important;
+}
+
+:global(.react-flow__controls-button) {
+    background: #1e293b !important;
+    border-bottom: 1px solid #334155 !important;
+    color: #94a3b8 !important;
+}
+
+:global(.react-flow__controls-button:hover) {
+    background: #263448 !important;
+    color: #e2e8f0 !important;
+}
+
+:global(.react-flow__edge-path) {
+    stroke: #4a5568 !important;
+    stroke-width: 2px !important;
+}
+
+:global(.react-flow__edge.selected .react-flow__edge-path) {
+    stroke: #3b82f6 !important;
+}
+
+:global(.react-flow__background) {
+    background: #1a1a2e !important;
+}
+
+/* Edge labels */
+:global(.react-flow__edge-text) {
+    fill: #94a3b8 !important;
+    font-size: 11px !important;
+}
+
+/* Selected node */
+.workflowNode.selected {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Loading state */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* Empty state */
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #64748b;
+    gap: 12px;
+    padding: 40px;
+    text-align: center;
+}
+
+.emptyIcon {
+    font-size: 48px;
+    opacity: 0.5;
+}
+
+.emptyText {
+    font-size: 14px;
+}
+
+/* Error indicator on stats */
+.errorStat {
+    color: #ef4444 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .statsBar {
+        gap: 16px;
+    }
+
+    .statValue {
+        font-size: 14px;
+    }
+
+    .detailPanel {
+        width: 280px;
+    }
+
+    .workflowNode {
+        min-width: 160px;
+        max-width: 220px;
+        padding: 10px 12px;
+    }
+}

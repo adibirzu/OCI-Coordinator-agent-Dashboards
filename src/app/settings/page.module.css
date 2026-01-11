@@ -1,0 +1,375 @@
+.container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.intro {
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 20px;
+}
+
+.title {
+    font-size: 1.8em;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--color-text-primary);
+}
+
+.subtitle {
+    color: var(--color-text-secondary);
+}
+
+.section {
+    background: var(--color-bg-glass);
+    backdrop-filter: var(--backdrop-blur);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.sectionHeader {
+    margin-bottom: 20px;
+}
+
+.sectionTitle {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 5px;
+}
+
+.sectionDescription {
+    font-size: 0.9em;
+    color: var(--color-text-tertiary);
+}
+
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.formGroup:last-child {
+    margin-bottom: 0;
+}
+
+.label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--color-text-secondary);
+}
+
+.select,
+.input {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px 12px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.select:focus,
+.input:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
+}
+
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-primary);
+}
+
+.saveIndicator {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--color-success);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    animation: fadeInOut 2s forwards;
+    z-index: 100;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    80% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+
+/* Configuration Status Styles */
+.configGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.configCard {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.configHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.configTitle {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.configIcon {
+    font-size: 1.2rem;
+}
+
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.statusBadge.online {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--color-success);
+}
+
+.statusBadge.offline {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--color-error);
+}
+
+.statusBadge.checking {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--color-warning);
+}
+
+.statusBadge.notConfigured {
+    background: rgba(107, 114, 128, 0.15);
+    color: var(--color-text-tertiary);
+}
+
+.statusDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.statusBadge.checking .statusDot {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.configDetails {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.configDetail {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.configDetail:last-child {
+    border-bottom: none;
+}
+
+.configDetailLabel {
+    color: var(--color-text-tertiary);
+}
+
+.configDetailValue {
+    color: var(--color-text-primary);
+    font-family: monospace;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.configActions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.testButton {
+    flex: 1;
+    padding: 8px 16px;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.testButton:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+    transform: translateY(-1px);
+}
+
+.testButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.testButton.secondary {
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    color: var(--color-text-secondary);
+}
+
+.testButton.secondary:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: transparent;
+}
+
+/* Environment Variables Display */
+.envVarsBox {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-family: monospace;
+    font-size: 0.8rem;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--color-text-secondary);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.envVarsBox code {
+    color: var(--color-primary);
+}
+
+/* Links and Help */
+.helpLink {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.helpLink:hover {
+    text-decoration: underline;
+}
+
+.infoBox {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    display: flex;
+    gap: 12px;
+}
+
+.infoBox .infoIcon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.warningBox {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 8px;
+}
+
+.tab {
+    padding: 8px 16px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.tab:hover {
+    color: var(--color-text-primary);
+    background: var(--color-bg-secondary);
+}
+
+.tab.active {
+    color: var(--color-primary);
+    background: var(--color-bg-glass);
+    border-bottom: 2px solid var(--color-primary);
+}

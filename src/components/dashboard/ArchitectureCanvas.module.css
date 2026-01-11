@@ -1,0 +1,172 @@
+.container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    overflow: hidden;
+}
+
+.canvas {
+    flex: 1;
+    height: 100%;
+}
+
+.detailsPanel {
+    width: 300px;
+    background: var(--color-bg-secondary);
+    border-left: 1px solid var(--border-subtle);
+    padding: 20px;
+    overflow-y: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+.detailsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.detailsHeader button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    transition: color 0.2s;
+}
+
+.detailsHeader button:hover {
+    color: var(--color-text-primary);
+}
+
+/* Node Styles */
+.node {
+    padding: 10px 15px;
+    border-radius: 8px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--border-subtle);
+    min-width: 150px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.node:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-color: var(--color-accent-oci);
+}
+
+.node.coordinator {
+    border-color: var(--color-accent-oci);
+    background: var(--color-bg-tertiary);
+}
+
+.node.agent {
+    border-color: var(--color-accent-mcp);
+}
+
+.node.mcp {
+    border-color: var(--color-success);
+}
+
+.nodeHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.nodeIcon {
+    font-size: 1.2rem;
+}
+
+.nodeTitle {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.nodeStatus {
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--color-text-secondary);
+}
+
+.statusDot {
+    font-size: 0.6rem;
+}
+
+.statusDot.connected,
+.statusDot.healthy,
+.statusDot.running,
+.statusDot.available {
+    color: var(--color-success);
+}
+
+/* Ensure status text also shows green */
+.nodeStatus.connected,
+.nodeStatus.healthy,
+.nodeStatus.running,
+.nodeStatus.available {
+    color: var(--color-success);
+}
+
+.nodeSubtext {
+    font-size: 0.7rem;
+    color: var(--color-text-tertiary);
+    margin-top: 4px;
+}
+
+.handle {
+    width: 8px !important;
+    height: 8px !important;
+    background: var(--color-text-tertiary) !important;
+}
+
+/* List Styles */
+.toolList {
+    list-style: none;
+    padding: 0;
+}
+
+.toolList li {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.toolList strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--color-text-primary);
+}
+
+.toolList p {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.tag {
+    background: var(--color-bg-tertiary);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    border: 1px solid var(--border-subtle);
+}

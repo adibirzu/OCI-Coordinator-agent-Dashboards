@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+}
+
+.contentWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    /* Prevent flex overflow */
+}
+
+.main {
+    flex: 1;
+    padding: var(--space-lg);
+    position: relative;
+}

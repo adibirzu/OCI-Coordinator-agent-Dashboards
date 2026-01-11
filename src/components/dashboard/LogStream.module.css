@@ -1,0 +1,121 @@
+.container {
+    background: var(--color-bg-glass);
+    backdrop-filter: var(--backdrop-blur);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    height: 400px;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: var(--space-sm);
+    font-weight: 600;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.liveIndicator {
+    font-size: 0.8em;
+    color: var(--color-success);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.6;
+    }
+}
+
+.controls {
+    display: flex;
+    gap: 8px;
+}
+
+.select {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--border-subtle);
+    color: var(--color-text-secondary);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    outline: none;
+}
+
+.select:hover {
+    border-color: var(--color-text-tertiary);
+    color: var(--color-text-primary);
+}
+
+.logList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    overflow-y: auto;
+    flex: 1;
+}
+
+.logEntry {
+    display: flex;
+    gap: var(--space-sm);
+    font-family: monospace;
+    font-size: 0.8rem;
+    padding: var(--space-2xs) var(--space-xs);
+    border-radius: var(--radius-sm);
+    transition: background 0.2s;
+}
+
+.logEntry:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.timestamp {
+    color: var(--color-text-tertiary);
+    min-width: 70px;
+}
+
+.source {
+    color: var(--color-accent-mcp);
+    font-weight: 600;
+    min-width: 90px;
+}
+
+.INFO {
+    color: var(--color-text-primary);
+}
+
+.WARN {
+    color: var(--color-warning);
+}
+
+.ERROR {
+    color: var(--color-error);
+}
+
+.emptyState {
+    text-align: center;
+    color: var(--color-text-tertiary);
+    padding: 20px;
+    font-style: italic;
+    opacity: 0.7;
+}

@@ -1,66 +1,48 @@
-import Image from "next/image";
+import { LogStream } from '@/components/dashboard/LogStream';
+import { EnhancedChat } from '@/components/chat/EnhancedChat';
+import { ResizableLayout } from '@/components/common/ResizableLayout';
+import { VerticalResizableLayout } from '@/components/common/VerticalResizableLayout';
+import { TopLeftPanel } from '@/components/dashboard/TopLeftPanel';
+import { QuickOverview } from '@/components/dashboard/QuickOverview';
 import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <main className={styles.main}>
+      <h1 className={styles.title}>OCI Coordinator Dashboard</h1>
+      <div className={styles.dashboard} style={{ height: 'calc(100vh - 100px)' }}>
+        <ResizableLayout
+          initialLeftWidth={40}
+          left={
+            <VerticalResizableLayout
+              initialTopHeight={50}
+              top={
+                <TopLeftPanel />
+              }
+              bottom={
+                <div className={styles.logsSection} style={{ height: '100%', overflow: 'hidden' }}>
+                  <LogStream />
+                </div>
+              }
             />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+          }
+          right={
+            <VerticalResizableLayout
+              initialTopHeight={30}
+              top={
+                <div className={styles.statusSection} style={{ height: '100%', overflow: 'auto' }}>
+                  <QuickOverview />
+                </div>
+              }
+              bottom={
+                <div className={styles.chatSection} style={{ height: '100%', overflow: 'hidden' }}>
+                  <EnhancedChat />
+                </div>
+              }
+            />
+          }
+        />
+      </div>
+    </main>
   );
 }

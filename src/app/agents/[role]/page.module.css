@@ -1,0 +1,163 @@
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    background: var(--color-bg-glass);
+    backdrop-filter: var(--backdrop-blur);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.headerContent h1 {
+    font-size: 2em;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.roleTag {
+    background: var(--color-bg-secondary);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.5em;
+    vertical-align: middle;
+    color: var(--color-text-secondary);
+    border: 1px solid var(--border-subtle);
+}
+
+.description {
+    color: var(--color-text-secondary);
+    font-size: 1.1em;
+    max-width: 600px;
+    line-height: 1.5;
+}
+
+.statusCard {
+    background: var(--color-bg-secondary);
+    padding: 15px 25px;
+    border-radius: var(--radius-md);
+    text-align: center;
+    border: 1px solid var(--border-subtle);
+}
+
+.statusLabel {
+    display: block;
+    font-size: 0.9em;
+    color: var(--color-text-tertiary);
+    margin-bottom: 5px;
+}
+
+.statusValue {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: var(--color-success);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 25px;
+}
+
+.card {
+    background: var(--color-bg-glass);
+    backdrop-filter: var(--backdrop-blur);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.cardTitle {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.skillsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.skillItem {
+    background: var(--color-bg-secondary);
+    padding: 15px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    transition: transform 0.2s;
+}
+
+.skillItem:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-primary);
+}
+
+.skillName {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+    color: var(--color-text-primary);
+}
+
+.skillDesc {
+    font-size: 0.85em;
+    color: var(--color-text-secondary);
+}
+
+.tagCloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    background: rgba(var(--color-primary-rgb), 0.1);
+    color: var(--color-primary);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    border: 1px solid rgba(var(--color-primary-rgb), 0.2);
+}
+
+.toolList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toolItem {
+    padding: 10px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.toolItem:last-child {
+    border-bottom: none;
+}
+
+.toolName {
+    font-weight: 600;
+    font-family: monospace;
+    font-size: 0.9em;
+    color: var(--color-accent-mcp);
+}

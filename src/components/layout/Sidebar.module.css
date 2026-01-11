@@ -1,0 +1,67 @@
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background: var(--color-bg-glass);
+    backdrop-filter: var(--backdrop-blur);
+    border-right: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-md);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm);
+    margin-bottom: var(--space-xl);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+}
+
+.brandText {
+    background: var(--gradient-oci);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    flex: 1;
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    transition: all var(--transition-fast);
+    font-weight: 500;
+}
+
+.navItem:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-primary);
+}
+
+.active {
+    background: rgba(255, 75, 62, 0.1);
+    color: var(--color-accent-oci);
+}
+
+.footer {
+    margin-top: auto;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border-subtle);
+    font-size: 0.75rem;
+    color: var(--color-text-tertiary);
+}

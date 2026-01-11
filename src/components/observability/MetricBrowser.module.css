@@ -1,0 +1,361 @@
+/* MetricBrowser Modal Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Browser Container */
+.browser {
+    background: var(--bg-secondary, #1a1a2e);
+    border: 1px solid var(--border-color, #333);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.2s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color, #333);
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.headerIcon {
+    font-size: 1.2rem;
+}
+
+.headerTitle {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary, #fff);
+}
+
+.closeButton {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary, #888);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+}
+
+.closeButton:hover {
+    background: var(--bg-tertiary, #252538);
+    color: var(--text-primary, #fff);
+}
+
+/* Search Section */
+.searchSection {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color, #333);
+}
+
+.searchBox {
+    display: flex;
+    align-items: center;
+    background: var(--bg-tertiary, #252538);
+    border: 1px solid var(--border-color, #333);
+    border-radius: 8px;
+    padding: 8px 12px;
+    gap: 8px;
+}
+
+.searchIcon {
+    font-size: 0.9rem;
+    opacity: 0.6;
+}
+
+.searchInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-primary, #fff);
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.searchInput::placeholder {
+    color: var(--text-secondary, #888);
+}
+
+.clearButton {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary, #888);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.clearButton:hover {
+    color: var(--text-primary, #fff);
+    background: var(--bg-secondary, #1a1a2e);
+}
+
+.searchStats {
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: var(--text-secondary, #888);
+}
+
+/* Namespace List */
+.namespaceList {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+}
+
+.namespaceGroup {
+    border-bottom: 1px solid var(--border-color, #333);
+}
+
+.namespaceGroup:last-child {
+    border-bottom: none;
+}
+
+.namespaceHeader {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary, #fff);
+    cursor: pointer;
+    transition: background 0.15s ease;
+    gap: 10px;
+    text-align: left;
+}
+
+.namespaceHeader:hover {
+    background: var(--bg-tertiary, #252538);
+}
+
+.namespaceHeader.expanded {
+    background: var(--bg-tertiary, #252538);
+}
+
+.namespaceIcon {
+    font-size: 1.1rem;
+}
+
+.namespaceName {
+    flex: 1;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.metricCount {
+    background: var(--accent-color, #4a90d9);
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.expandIcon {
+    font-size: 0.7rem;
+    color: var(--text-secondary, #888);
+    transition: transform 0.15s ease;
+}
+
+/* Metric List (expanded) */
+.metricList {
+    background: var(--bg-primary, #0f0f1a);
+    padding: 4px 0;
+}
+
+.metricItem {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 10px 20px 10px 48px;
+    background: transparent;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    gap: 2px;
+}
+
+.metricItem:hover {
+    background: var(--bg-secondary, #1a1a2e);
+}
+
+.metricItem.selected {
+    background: rgba(74, 144, 217, 0.15);
+    border-left: 3px solid var(--accent-color, #4a90d9);
+    padding-left: 45px;
+}
+
+.metricMain {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.metricName {
+    color: var(--text-primary, #fff);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.selectedBadge {
+    background: var(--accent-color, #4a90d9);
+    color: white;
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.metricDescription {
+    color: var(--text-secondary, #888);
+    font-size: 0.8rem;
+    line-height: 1.3;
+}
+
+/* Empty State */
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    gap: 12px;
+}
+
+.emptyIcon {
+    font-size: 2rem;
+    opacity: 0.5;
+}
+
+.emptyText {
+    color: var(--text-secondary, #888);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* Footer */
+.footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border-color, #333);
+    background: var(--bg-tertiary, #252538);
+    border-radius: 0 0 12px 12px;
+}
+
+.footerHint {
+    font-size: 0.8rem;
+    color: var(--text-secondary, #888);
+}
+
+/* Quick Selector (inline dropdown) */
+.quickSelector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.quickSelect {
+    appearance: none;
+    background: var(--bg-tertiary, #252538);
+    border: 1px solid var(--border-color, #333);
+    border-radius: 6px;
+    color: var(--text-primary, #fff);
+    padding: 8px 32px 8px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    min-width: 200px;
+}
+
+.quickSelect:hover {
+    border-color: var(--accent-color, #4a90d9);
+}
+
+.quickSelect:focus {
+    outline: none;
+    border-color: var(--accent-color, #4a90d9);
+    box-shadow: 0 0 0 2px rgba(74, 144, 217, 0.2);
+}
+
+.quickSelect optgroup {
+    font-weight: 600;
+    color: var(--text-secondary, #888);
+    background: var(--bg-secondary, #1a1a2e);
+}
+
+.quickSelect option {
+    background: var(--bg-secondary, #1a1a2e);
+    color: var(--text-primary, #fff);
+    padding: 8px;
+}
+
+.selectArrow {
+    position: absolute;
+    right: 48px;
+    font-size: 0.7rem;
+    color: var(--text-secondary, #888);
+    pointer-events: none;
+}
+
+.browseButton {
+    background: var(--bg-tertiary, #252538);
+    border: 1px solid var(--border-color, #333);
+    border-radius: 6px;
+    color: var(--text-secondary, #888);
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.15s ease;
+}
+
+.browseButton:hover {
+    background: var(--bg-secondary, #1a1a2e);
+    color: var(--text-primary, #fff);
+    border-color: var(--accent-color, #4a90d9);
+}

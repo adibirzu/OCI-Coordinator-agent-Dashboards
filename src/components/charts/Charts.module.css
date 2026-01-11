@@ -1,0 +1,153 @@
+/* Chart container styles */
+.chartContainer {
+    position: relative;
+    width: 100%;
+    padding: 1rem;
+    background: rgba(30, 30, 30, 0.5);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Doughnut chart center overlay */
+.doughnutCenter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.centerValue {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4ecdc4;
+    line-height: 1;
+}
+
+.centerLabel {
+    font-size: 0.875rem;
+    color: #888;
+    margin-top: 0.25rem;
+}
+
+/* Chart title styles */
+.chartTitle {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Loading state */
+.chartLoading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    color: #888;
+}
+
+.chartLoading::after {
+    content: '';
+    width: 24px;
+    height: 24px;
+    border: 2px solid rgba(78, 205, 196, 0.3);
+    border-top-color: #4ecdc4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 0.5rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Empty state */
+.chartEmpty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Chart grid layout for multiple charts */
+.chartGrid {
+    display: grid;
+    gap: 1rem;
+}
+
+.chartGrid2Col {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.chartGrid3Col {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 1024px) {
+    .chartGrid2Col,
+    .chartGrid3Col {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Legend customization */
+.legendContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+    color: #888;
+}
+
+.legendDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+/* Metric badge overlay */
+.metricBadge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(78, 205, 196, 0.2);
+    border: 1px solid rgba(78, 205, 196, 0.3);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    color: #4ecdc4;
+    font-weight: 500;
+}
+
+.metricBadgeWarning {
+    background: rgba(255, 230, 109, 0.2);
+    border-color: rgba(255, 230, 109, 0.3);
+    color: #ffe66d;
+}
+
+.metricBadgeCritical {
+    background: rgba(255, 107, 107, 0.2);
+    border-color: rgba(255, 107, 107, 0.3);
+    color: #ff6b6b;
+}

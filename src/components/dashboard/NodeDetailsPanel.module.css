@@ -1,0 +1,236 @@
+.panel {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    bottom: 20px;
+    width: 320px;
+    background: rgba(15, 17, 21, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.4);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-subtle);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.header {
+    padding: 16px;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h3 {
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--color-text-tertiary);
+    padding: 0 5px;
+}
+
+.closeButton:hover {
+    color: var(--color-text-primary);
+}
+
+.content {
+    padding: 16px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.section h4 {
+    margin: 0 0 10px 0;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-tertiary);
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    background: var(--color-bg-tertiary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    color: var(--color-text-secondary);
+    border: 1px solid var(--border-subtle);
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.list li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 0.9em;
+}
+
+.toolList li {
+    padding: 10px 0;
+}
+
+.toolList strong {
+    display: block;
+    color: var(--color-accent-oci);
+    margin-bottom: 2px;
+}
+
+.toolList p {
+    margin: 0;
+    font-size: 0.9em;
+    color: var(--color-text-secondary);
+}
+
+.footer {
+    padding-top: 15px;
+    margin-top: 15px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.linkButton {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: var(--color-accent-oci);
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.linkButton:hover {
+    background: #a53828;
+}
+
+/* Log Section Styles */
+.logList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.logItem {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 0.85em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.logTime {
+    color: var(--color-text-tertiary);
+    font-size: 0.9em;
+    min-width: 60px;
+}
+
+.logLevel {
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 0.8em;
+    text-transform: uppercase;
+}
+
+.INFO {
+    background: rgba(33, 150, 243, 0.1);
+    color: #1976d2;
+}
+
+.WARN {
+    background: rgba(255, 152, 0, 0.1);
+    color: #f57c00;
+}
+
+.ERROR {
+    background: rgba(244, 67, 54, 0.1);
+    color: #d32f2f;
+}
+
+.logMessage {
+    width: 100%;
+    color: var(--color-text-secondary);
+    font-family: 'SF Mono', 'Roboto Mono', 'Menlo', monospace;
+    margin-top: 4px;
+    word-break: break-all;
+}
+
+.loading,
+.noLogs {
+    padding: 15px 0;
+    color: var(--color-text-tertiary);
+    font-style: italic;
+    font-size: 0.9em;
+    text-align: center;
+    background: var(--color-bg-tertiary);
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+/* Agent Details Styles */
+.description {
+    margin: 0;
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+}
+
+.mcpTag {
+    background: linear-gradient(135deg, rgba(0, 191, 165, 0.15), rgba(0, 150, 136, 0.15));
+    border-color: rgba(0, 191, 165, 0.3);
+    color: var(--color-accent-mcp);
+}
+
+.stat {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: 600;
+    color: var(--color-accent-oci);
+}
+
+/* Activity section with top border separator */
+.activitySection {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-subtle);
+}

@@ -1,0 +1,466 @@
+/**
+ * LLM Dashboard Styles
+ *
+ * CSS module for the LLM Observability dashboard.
+ * Uses a dark theme consistent with the rest of the observability components.
+ */
+
+/* Dashboard Container */
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background: #0f172a;
+    min-height: 100vh;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    background: #1e293b;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.tab {
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.tab:hover {
+    color: #e2e8f0;
+}
+
+.tab.active {
+    background: #3b82f6;
+    color: white;
+}
+
+/* Time Range */
+.timeRange {
+    display: flex;
+    background: #1e293b;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.rangeButton {
+    padding: 6px 12px;
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.rangeButton:hover {
+    color: #94a3b8;
+}
+
+.rangeButton.active {
+    background: #334155;
+    color: #f8fafc;
+}
+
+/* Metrics Grid */
+.metricsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+/* Metric Card */
+.metricCard {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+    border-top: 3px solid #3b82f6;
+}
+
+.metricHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.metricIcon {
+    font-size: 18px;
+}
+
+.metricTitle {
+    font-size: 12px;
+    font-weight: 500;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metricValue {
+    font-size: 32px;
+    font-weight: 700;
+    color: #f8fafc;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.metricSubtitle {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.metricTrend {
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+.metricTrend.positive {
+    color: #22c55e;
+}
+
+.metricTrend.negative {
+    color: #ef4444;
+}
+
+/* Charts Grid */
+.chartsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.chartsRow {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+/* Chart Card */
+.chartCard {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.chartTitle {
+    margin: 0 0 16px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.chartContainer {
+    height: 250px;
+    position: relative;
+}
+
+.doughnutContainer {
+    height: 280px;
+    position: relative;
+}
+
+/* Conversation List */
+.conversationList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.conversationItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #0f172a;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.conversationItem:hover {
+    background: #1a2744;
+}
+
+.convRank {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    width: 28px;
+}
+
+.convId {
+    flex: 1;
+    font-size: 13px;
+    color: #94a3b8;
+    font-family: monospace;
+}
+
+.convCost {
+    font-size: 13px;
+    font-weight: 600;
+    color: #22c55e;
+}
+
+.convTokens {
+    font-size: 12px;
+    color: #64748b;
+    min-width: 100px;
+    text-align: right;
+}
+
+/* Models View */
+.modelsView {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Table Card */
+.tableCard {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+/* Table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.table th {
+    text-align: left;
+    padding: 12px;
+    background: #0f172a;
+    color: #94a3b8;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+.table td {
+    padding: 12px;
+    color: #e2e8f0;
+    border-bottom: 1px solid #334155;
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+.table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.modelName {
+    font-weight: 500;
+    font-family: monospace;
+}
+
+.providerBadge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    color: white;
+}
+
+.costCell {
+    font-weight: 600;
+    color: #22c55e;
+}
+
+/* Quality & Security Views */
+.qualityView,
+.securityView {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.issuesSummary {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.issuesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.issueCard {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px;
+    border-left: 3px solid #64748b;
+}
+
+.issueType {
+    font-size: 12px;
+    font-weight: 500;
+    color: #94a3b8;
+    text-transform: capitalize;
+    margin-bottom: 8px;
+}
+
+.issueCount {
+    font-size: 28px;
+    font-weight: 700;
+    color: #f8fafc;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.issueSeverity {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Explanation Sections */
+.qualityExplanation,
+.securityExplanation {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.qualityExplanation h4,
+.securityExplanation h4 {
+    margin: 0 0 16px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.qualityExplanation ul,
+.securityExplanation ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.qualityExplanation li,
+.securityExplanation li {
+    color: #94a3b8;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.qualityExplanation strong,
+.securityExplanation strong {
+    color: #e2e8f0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .chartsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .chartsRow {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 16px;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .tabs {
+        flex-wrap: wrap;
+    }
+
+    .metricsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .metricValue {
+        font-size: 24px;
+    }
+
+    .issuesGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .conversationItem {
+        flex-wrap: wrap;
+    }
+
+    .convTokens {
+        width: 100%;
+        text-align: left;
+        margin-top: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .metricsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .issuesGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .tabs {
+        width: 100%;
+    }
+
+    .tab {
+        flex: 1;
+        text-align: center;
+    }
+}

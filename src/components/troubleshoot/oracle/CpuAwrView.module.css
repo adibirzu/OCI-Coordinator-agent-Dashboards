@@ -1,0 +1,252 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Status Bar */
+.statusBar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.statusDot.loading { background: #f59e0b; }
+.statusDot.connected { background: #22c55e; }
+.statusDot.mock { background: #3b82f6; }
+.statusDot.error { background: #ef4444; }
+
+.statusText {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+/* Load Profile Grid */
+.loadProfileGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.loadCard {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.loadValue {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.loadLabel {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+}
+
+/* Throttle Warning */
+.throttleWarning {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 8px;
+}
+
+.warningIcon {
+    font-size: 1.5rem;
+}
+
+.warningContent strong {
+    display: block;
+    font-size: 0.875rem;
+    color: #f59e0b;
+    margin-bottom: 0.25rem;
+}
+
+.warningContent p {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.warningContent code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.125rem 0.375rem;
+    border-radius: 3px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #fbbf24;
+}
+
+/* Charts Row */
+.chartsRow {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 1rem;
+}
+
+.chartCard, .eventsCard {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.chartCard h3, .eventsCard h3, .tableCard h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+    margin: 0 0 1rem 0;
+}
+
+.chartContainer {
+    height: 250px;
+    position: relative;
+}
+
+/* Events List */
+.eventsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.eventRow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+}
+
+.eventRank {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.eventInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.eventName {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.eventMeta {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+    font-size: 0.625rem;
+    color: #64748b;
+}
+
+.eventClass {
+    padding: 0.0625rem 0.375rem;
+    border-radius: 3px;
+    color: white;
+    font-weight: 500;
+}
+
+.eventPct {
+    width: 60px;
+    text-align: right;
+}
+
+.pctValue {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+}
+
+.pctBar {
+    height: 3px;
+    border-radius: 2px;
+    margin-top: 0.25rem;
+}
+
+/* Table Card */
+.tableCard {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.tableWrapper {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+}
+
+.table th {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.table td {
+    padding: 0.5rem 0.75rem;
+    color: #cbd5e1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.table tr:hover td {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.mono {
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.highlight {
+    color: #c74634;
+    font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+    .chartsRow {
+        grid-template-columns: 1fr;
+    }
+
+    .loadProfileGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

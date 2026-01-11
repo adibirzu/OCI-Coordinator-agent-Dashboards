@@ -1,0 +1,349 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Terminal Header */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.terminalIcon {
+    font-size: 0.875rem;
+}
+
+.title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: white;
+}
+
+.connectionDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+}
+
+.connectionDot.connected { background: #22c55e; }
+.connectionDot.disconnected { background: #ef4444; }
+.connectionDot.mock { background: #3b82f6; }
+
+.serverName {
+    font-size: 0.6875rem;
+    color: #64748b;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.filterGroup {
+    display: flex;
+    gap: 0.125rem;
+}
+
+.filterBtn {
+    padding: 0.25rem 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    color: #64748b;
+    font-size: 0.625rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: capitalize;
+}
+
+.filterBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+}
+
+.filterBtn.active {
+    background: rgba(199, 70, 52, 0.2);
+    border-color: rgba(199, 70, 52, 0.5);
+    color: #c74634;
+}
+
+.controls {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.controlBtn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: #94a3b8;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.controlBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.controlBtn.paused {
+    background: rgba(245, 158, 11, 0.2);
+    border-color: rgba(245, 158, 11, 0.5);
+    color: #f59e0b;
+}
+
+/* Terminal Body */
+.terminal {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 0.75rem;
+}
+
+.terminal::-webkit-scrollbar {
+    width: 8px;
+}
+
+.terminal::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.terminal::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.terminal::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Entry Items */
+.entry {
+    margin-bottom: 2px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid transparent;
+    transition: all 0.15s;
+}
+
+.entry:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.entry.expanded {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.1);
+    margin-bottom: 0.5rem;
+}
+
+.entry.success .statusIcon { color: #22c55e; }
+.entry.error .statusIcon { color: #ef4444; }
+.entry.pending .statusIcon { color: #f59e0b; }
+
+.entryHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.625rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.expandIcon {
+    font-size: 0.625rem;
+    color: #64748b;
+    width: 12px;
+    transition: transform 0.15s;
+}
+
+.entry.expanded .expandIcon {
+    color: #94a3b8;
+}
+
+.statusIcon {
+    font-size: 0.75rem;
+    width: 14px;
+    text-align: center;
+}
+
+.timestamp {
+    color: #64748b;
+    font-size: 0.6875rem;
+    min-width: 65px;
+}
+
+.toolName {
+    color: #a5f3fc;
+    font-weight: 500;
+}
+
+.duration {
+    margin-left: auto;
+    padding: 0.125rem 0.375rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+    color: #94a3b8;
+    font-size: 0.625rem;
+}
+
+.errorHint {
+    color: #f87171;
+    font-size: 0.625rem;
+    margin-left: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+/* Entry Body (Expanded) */
+.entryBody {
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.section {
+    margin-bottom: 0.75rem;
+}
+
+.section:last-child {
+    margin-bottom: 0;
+}
+
+.sectionLabel {
+    font-size: 0.625rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.375rem;
+}
+
+.json {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    padding: 0.5rem 0.625rem;
+    color: #cbd5e1;
+    font-size: 0.6875rem;
+    line-height: 1.5;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+}
+
+.json.error {
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.05);
+}
+
+/* Empty State */
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: #64748b;
+}
+
+.emptyIcon {
+    font-size: 2.5rem;
+    opacity: 0.4;
+    margin-bottom: 0.75rem;
+}
+
+.emptyState p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #94a3b8;
+}
+
+.emptyHint {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 0.375rem;
+}
+
+/* Terminal Footer */
+.footer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.6875rem;
+}
+
+.stats {
+    color: #64748b;
+}
+
+.pausedIndicator {
+    color: #f59e0b;
+    font-weight: 500;
+}
+
+.scrollBtn {
+    margin-left: auto;
+    padding: 0.25rem 0.5rem;
+    background: rgba(199, 70, 52, 0.15);
+    border: 1px solid rgba(199, 70, 52, 0.3);
+    border-radius: 3px;
+    color: #c74634;
+    font-size: 0.625rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.scrollBtn:hover {
+    background: rgba(199, 70, 52, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .headerRight {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .errorHint {
+        display: none;
+    }
+
+    .duration {
+        margin-left: 0.5rem;
+    }
+}

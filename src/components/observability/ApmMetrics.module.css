@@ -1,0 +1,925 @@
+/* APM Metrics - Cyber-Industrial Dashboard */
+
+.container {
+    background: linear-gradient(180deg, rgba(26, 29, 35, 0.95) 0%, rgba(15, 17, 21, 0.95) 100%);
+    border: 1px solid var(--border-highlight);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+}
+
+/* Subtle grid pattern */
+.container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+    background-size: 16px 16px;
+    pointer-events: none;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-lg);
+    position: relative;
+    z-index: 1;
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.headerIcon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.2) 0%, rgba(0, 163, 255, 0.1) 100%);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+}
+
+.headerTitle {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-2xs) var(--space-sm);
+    border-radius: var(--radius-full);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.statusConnected {
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: var(--color-success);
+}
+
+.statusDisconnected {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: var(--color-error);
+}
+
+.statusUnavailable {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: var(--color-warning);
+}
+
+.statusDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.statusConnected .statusDot {
+    background: var(--color-success);
+    box-shadow: 0 0 8px var(--color-success);
+}
+
+.statusDisconnected .statusDot {
+    background: var(--color-error);
+    animation: none;
+}
+
+.statusUnavailable .statusDot {
+    background: var(--color-warning);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Metrics Grid */
+.metricsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .metricsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Metric Card */
+.metricCard {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    position: relative;
+    transition: all var(--transition-fast);
+}
+
+.metricCard:hover {
+    border-color: rgba(0, 240, 255, 0.3);
+    background: var(--color-bg-tertiary);
+    transform: translateY(-2px);
+}
+
+.metricCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-mcp);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.metricCard:hover::before {
+    opacity: 1;
+}
+
+.metricLabel {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-xs);
+}
+
+.metricValue {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2xs);
+}
+
+.metricUnit {
+    font-size: 0.75rem;
+    color: var(--color-text-tertiary);
+    font-weight: 400;
+}
+
+.metricTrend {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-size: 0.6875rem;
+    margin-top: var(--space-xs);
+}
+
+.trendUp {
+    color: var(--color-success);
+}
+
+.trendDown {
+    color: var(--color-error);
+}
+
+.trendNeutral {
+    color: var(--color-text-tertiary);
+}
+
+/* Progress Bar */
+.progressContainer {
+    margin-top: var(--space-sm);
+}
+
+.progressBar {
+    height: 4px;
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.5s ease-out;
+}
+
+.progressSuccess {
+    background: linear-gradient(90deg, var(--color-success), #4ade80);
+}
+
+.progressWarning {
+    background: linear-gradient(90deg, var(--color-warning), #fbbf24);
+}
+
+.progressError {
+    background: linear-gradient(90deg, var(--color-error), #f87171);
+}
+
+.progressMcp {
+    background: var(--gradient-mcp);
+}
+
+/* Gauge Component */
+.gaugeContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-sm);
+}
+
+.gauge {
+    position: relative;
+    width: 80px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.gaugeBackground {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 6px solid var(--color-bg-primary);
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    transform: rotate(-45deg);
+}
+
+.gaugeFill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 6px solid transparent;
+    transform: rotate(-45deg);
+    transition: all 0.5s ease-out;
+}
+
+.gaugeFillSuccess {
+    border-top-color: var(--color-success);
+    border-right-color: var(--color-success);
+}
+
+.gaugeFillWarning {
+    border-top-color: var(--color-warning);
+    border-right-color: var(--color-warning);
+}
+
+.gaugeFillError {
+    border-top-color: var(--color-error);
+    border-right-color: var(--color-error);
+}
+
+.gaugeValue {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+/* Circular Progress */
+.circularProgress {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto var(--space-sm);
+}
+
+.circularProgress svg {
+    transform: rotate(-90deg);
+}
+
+.circularBg {
+    fill: none;
+    stroke: var(--color-bg-primary);
+    stroke-width: 4;
+}
+
+.circularFill {
+    fill: none;
+    stroke-width: 4;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.5s ease-out;
+}
+
+.circularFillSuccess {
+    stroke: var(--color-success);
+}
+
+.circularFillWarning {
+    stroke: var(--color-warning);
+}
+
+.circularFillError {
+    stroke: var(--color-error);
+}
+
+.circularFillMcp {
+    stroke: var(--color-accent-mcp);
+}
+
+.circularValue {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+/* Sparkline */
+.sparklineContainer {
+    margin-top: var(--space-sm);
+    height: 24px;
+}
+
+.sparkline {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 100%;
+}
+
+.sparklineBar {
+    flex: 1;
+    background: rgba(0, 240, 255, 0.3);
+    border-radius: 1px;
+    min-width: 3px;
+    transition: height 0.3s ease-out;
+}
+
+.sparklineBar:last-child {
+    background: var(--color-accent-mcp);
+}
+
+/* Loading State */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl);
+    gap: var(--space-sm);
+}
+
+.loadingSpinner {
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--border-subtle);
+    border-top-color: var(--color-accent-mcp);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loadingText {
+    font-size: 0.75rem;
+    color: var(--color-text-tertiary);
+}
+
+/* Unavailable State */
+.unavailableState {
+    text-align: center;
+    padding: var(--space-lg);
+    color: var(--color-text-tertiary);
+}
+
+.unavailableIcon {
+    font-size: 2rem;
+    margin-bottom: var(--space-sm);
+    opacity: 0.5;
+}
+
+.unavailableText {
+    font-size: 0.875rem;
+}
+
+/* Mini Stats Row */
+.miniStats {
+    display: flex;
+    gap: var(--space-lg);
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.miniStat {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+}
+
+.miniStatIcon {
+    font-size: 0.875rem;
+}
+
+.miniStatValue {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* LINE CHART VISUALIZATION                                                     */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+/* Metric Selector Dropdown */
+.metricSelector {
+    position: relative;
+}
+
+.metricSelect {
+    appearance: none;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: var(--space-xs) var(--space-lg) var(--space-xs) var(--space-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    min-width: 140px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.metricSelect:hover {
+    border-color: var(--color-accent-mcp);
+    background: var(--color-bg-tertiary);
+}
+
+.metricSelect:focus {
+    outline: none;
+    border-color: var(--color-accent-mcp);
+    box-shadow: 0 0 0 2px rgba(0, 212, 170, 0.2);
+}
+
+.selectArrow {
+    position: absolute;
+    right: var(--space-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--color-text-tertiary);
+    font-size: 0.625rem;
+}
+
+/* Chart Section */
+.chartSection {
+    position: relative;
+    z-index: 1;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.chartHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.chartTitle {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.chartNamespace {
+    font-size: 0.6875rem;
+    color: var(--color-text-tertiary);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    padding: var(--space-2xs) var(--space-xs);
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--border-subtle);
+}
+
+/* Chart Stats Row */
+.chartStats {
+    display: flex;
+    gap: var(--space-lg);
+    margin-top: var(--space-md);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.chartStat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.chartStatLabel {
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-tertiary);
+}
+
+.chartStatValue {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+/* Line Chart Container */
+.lineChartContainer {
+    position: relative;
+    padding: var(--space-xs) 0;
+}
+
+.lineChartSvg {
+    width: 100%;
+    overflow: visible;
+}
+
+/* Grid Lines */
+.gridLine {
+    stroke: var(--border-subtle);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+    opacity: 0.5;
+}
+
+/* Chart Area Fill (gradient under line) */
+.chartArea {
+    transition: opacity 0.3s ease;
+}
+
+/* Chart Line */
+.chartLine {
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 4px currentColor);
+}
+
+/* Data Points */
+.chartPoint {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.chartPoint:hover {
+    r: 5;
+    filter: drop-shadow(0 0 6px currentColor);
+}
+
+/* Axis Labels */
+.axisLabel {
+    font-size: 0.5625rem;
+    fill: var(--color-text-tertiary);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+/* Empty Chart State */
+.chartEmpty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl);
+    color: var(--color-text-tertiary);
+    text-align: center;
+}
+
+.chartEmpty::before {
+    content: '📊';
+    font-size: 2rem;
+    margin-bottom: var(--space-sm);
+    opacity: 0.5;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* RESOURCE DIMENSIONS SECTION                                                  */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dimensionsSection {
+    margin-top: var(--space-md);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.dimensionsHeader {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-sm);
+}
+
+.dimensionsIcon {
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+.dimensionsTitle {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-tertiary);
+}
+
+.dimensionsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-sm);
+}
+
+.dimensionItem {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    transition: border-color var(--transition-fast);
+}
+
+.dimensionItem:hover {
+    border-color: rgba(0, 240, 255, 0.3);
+}
+
+.dimensionKey {
+    font-size: 0.5625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-tertiary);
+}
+
+.dimensionValue {
+    font-size: 0.6875rem;
+    color: var(--color-text-secondary);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    word-break: break-all;
+    cursor: default;
+}
+
+/* Dimension Filter - Clickable Values */
+.dimensionsHint {
+    font-size: 0.5625rem;
+    font-weight: 400;
+    color: var(--color-text-tertiary);
+    opacity: 0.7;
+    margin-left: auto;
+}
+
+.activeFilterBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-2xs) var(--space-sm);
+    background: rgba(0, 212, 170, 0.15);
+    border: 1px solid rgba(0, 212, 170, 0.4);
+    border-radius: var(--radius-full);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--color-accent-mcp);
+    margin-bottom: var(--space-sm);
+    animation: filterPulse 2s ease-in-out infinite;
+}
+
+@keyframes filterPulse {
+    0%, 100% { border-color: rgba(0, 212, 170, 0.4); }
+    50% { border-color: rgba(0, 212, 170, 0.7); }
+}
+
+.filterIcon {
+    font-size: 0.75rem;
+}
+
+.clearFilterBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background: rgba(0, 212, 170, 0.2);
+    border: none;
+    border-radius: 50%;
+    font-size: 0.625rem;
+    color: var(--color-accent-mcp);
+    cursor: pointer;
+    margin-left: var(--space-2xs);
+    transition: all var(--transition-fast);
+}
+
+.clearFilterBtn:hover {
+    background: rgba(239, 68, 68, 0.3);
+    color: var(--color-error);
+    transform: scale(1.1);
+}
+
+.dimensionItem {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+
+.dimensionItem:hover {
+    border-color: rgba(0, 240, 255, 0.4);
+    background: var(--color-bg-secondary);
+    transform: translateY(-1px);
+}
+
+.dimensionItem:focus {
+    outline: none;
+    border-color: var(--color-accent-mcp);
+    box-shadow: 0 0 0 2px rgba(0, 212, 170, 0.2);
+}
+
+.dimensionItemActive {
+    background: rgba(0, 212, 170, 0.1);
+    border-color: var(--color-accent-mcp);
+    box-shadow: 0 0 8px rgba(0, 212, 170, 0.2);
+}
+
+.dimensionItemActive .dimensionKey {
+    color: var(--color-accent-mcp);
+}
+
+.dimensionValueClickable {
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.dimensionValueClickable:hover {
+    color: var(--color-accent-mcp);
+}
+
+.dimensionItemActive .dimensionValueClickable {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+/* Source Info Footer */
+.sourceInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--space-lg);
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.sourceLeft {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.sourceBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-2xs) var(--space-sm);
+    background: rgba(0, 212, 170, 0.1);
+    border: 1px solid rgba(0, 212, 170, 0.3);
+    border-radius: var(--radius-full);
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: var(--color-accent-mcp);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sourceIcon {
+    font-size: 0.75rem;
+}
+
+.sourceTimestamp {
+    font-size: 0.625rem;
+    color: var(--color-text-tertiary);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.refreshButton {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-2xs) var(--space-sm);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    font-size: 0.625rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.refreshButton:hover {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-accent-mcp);
+    color: var(--color-accent-mcp);
+}
+
+.refreshIcon {
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+}
+
+.refreshButton:hover .refreshIcon {
+    transform: rotate(180deg);
+}
+
+.refreshIcon.refreshing {
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.refreshButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Responsive Chart */
+@media (max-width: 640px) {
+    .chartStats {
+        flex-wrap: wrap;
+        gap: var(--space-md);
+    }
+
+    .chartStat {
+        flex: 1 1 45%;
+    }
+
+    .metricSelect {
+        min-width: 120px;
+        font-size: 0.6875rem;
+    }
+
+    .dimensionsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .sourceInfo {
+        flex-direction: column;
+        gap: var(--space-sm);
+        align-items: flex-start;
+    }
+}

@@ -1,0 +1,333 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Status Bar */
+.statusBar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.statusDot.loading { background: #f59e0b; animation: pulse 1s infinite; }
+.statusDot.connected { background: #22c55e; }
+.statusDot.mock { background: #3b82f6; }
+.statusDot.error { background: #ef4444; }
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.statusText {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+/* Stats Grid */
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.statCard {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.statCard.warning {
+    border-color: rgba(245, 158, 11, 0.5);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, #1e293b 100%);
+}
+
+.statCard.warning .statValue {
+    color: #f59e0b;
+}
+
+.statValue {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.statLabel {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+}
+
+/* Main Content */
+.mainContent {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 1rem;
+}
+
+/* Chart Card */
+.chartCard {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    position: relative;
+}
+
+.chartCard h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+    margin: 0 0 1rem 0;
+}
+
+.chartContainer {
+    height: 200px;
+    position: relative;
+}
+
+.chartCenter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    text-align: center;
+    pointer-events: none;
+}
+
+.centerValue {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: white;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.centerLabel {
+    font-size: 0.625rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Sessions Card */
+.sessionsCard {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.sessionsCard h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+    margin: 0 0 1rem 0;
+}
+
+.sessionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.sessionItem {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 0.75rem;
+}
+
+.sessionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.sessionId {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.sqlId {
+    font-size: 0.6875rem;
+    color: #3b82f6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.sessionDetails {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.375rem 1rem;
+    font-size: 0.6875rem;
+}
+
+.detailItem {
+    display: flex;
+    gap: 0.375rem;
+}
+
+.label {
+    color: #64748b;
+}
+
+.value {
+    color: #cbd5e1;
+}
+
+.value.degraded {
+    color: #f59e0b;
+}
+
+.degradeBadge {
+    display: inline-block;
+    margin-left: 0.25rem;
+    padding: 0.0625rem 0.25rem;
+    background: rgba(245, 158, 11, 0.2);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 3px;
+    font-size: 0.5rem;
+    font-weight: 600;
+    color: #f59e0b;
+}
+
+.dopBar {
+    margin-top: 0.5rem;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.dopFill {
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e 0%, #f59e0b 50%, #ef4444 100%);
+    background-size: 200% 100%;
+    background-position: calc((100 - var(--pct, 100)) * 1%) 0;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+/* Empty State */
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: #64748b;
+}
+
+.emptyIcon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
+}
+
+.emptyState p {
+    margin: 0;
+    font-size: 0.75rem;
+}
+
+/* Downgrade Card */
+.downgradeCard {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.downgradeCard h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.downgradeCard h3::before {
+    content: '⚠️';
+    font-size: 0.875rem;
+}
+
+.downgradeList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.downgradeItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.625rem 0.75rem;
+    background: rgba(245, 158, 11, 0.05);
+    border: 1px solid rgba(245, 158, 11, 0.1);
+    border-radius: 6px;
+}
+
+.downgradeHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.downgradeDetails {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dopChange {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #f59e0b;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.reason {
+    font-size: 0.6875rem;
+    color: #94a3b8;
+}
+
+.timestamp {
+    font-size: 0.625rem;
+    color: #64748b;
+}
+
+@media (max-width: 1024px) {
+    .mainContent {
+        grid-template-columns: 1fr;
+    }
+
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .downgradeItem {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}

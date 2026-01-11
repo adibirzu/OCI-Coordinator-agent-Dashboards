@@ -111,17 +111,36 @@ export async function GET(request: Request) {
 
         const response = await computeClient.listInstances(listInstancesRequest);
 
-        const instances: InstanceSummary[] = (response.items || []).map(instance => ({
-            id: instance.id || '',
-            displayName: instance.displayName || 'Unnamed',
-            lifecycleState: instance.lifecycleState || 'UNKNOWN',
-            shape: instance.shape || 'Unknown',
-            availabilityDomain: instance.availabilityDomain || '',
-            timeCreated: instance.timeCreated?.toISOString() || '',
-            compartmentId: instance.compartmentId || '',
-            faultDomain: instance.faultDomain || '',
-            region: REGION
-        }));
+        const instances: InstanceSummary[] = (response.items || []).map(instance => {
+            // Handle timeCreated - could be Date object or string depending on SDK serialization
+            let timeCreatedStr = '';
+            if (instance.timeCreated) {
+                if (instance.timeCreated instanceof Date) {
+                    timeCreatedStr = instance.timeCreated.toISOString();
+                } else if (typeof instance.timeCreated === 'string') {
+                    timeCreatedStr = instance.timeCreated;
+                } else {
+                    // Try to convert to string if it has a toISOString method
+                    try {
+                        timeCreatedStr = (instance.timeCreated as any).toISOString?.() || String(instance.timeCreated);
+                    } catch {
+                        timeCreatedStr = String(instance.timeCreated);
+                    }
+                }
+            }
+
+            return {
+                id: instance.id || '',
+                displayName: instance.displayName || 'Unnamed',
+                lifecycleState: instance.lifecycleState || 'UNKNOWN',
+                shape: instance.shape || 'Unknown',
+                availabilityDomain: instance.availabilityDomain || '',
+                timeCreated: timeCreatedStr,
+                compartmentId: instance.compartmentId || '',
+                faultDomain: instance.faultDomain || '',
+                region: REGION
+            };
+        });
 
         const result: InstanceListResponse = {
             instances,

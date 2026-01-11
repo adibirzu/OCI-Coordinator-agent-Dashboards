@@ -127,15 +127,16 @@ async function fetchFromOCI(params: {
         const endTime = new Date();
 
         // Build query with optional dimension filter
-        // MQL syntax: MetricName[interval]{dimension = "value"}.aggregation()
+        // OCI MQL syntax: MetricName[interval]{dimension = "value"}.aggregation()
+        // The dimension filter goes AFTER the interval bracket, not before
         // Example: CpuUtilization[1m]{resourceDisplayName = "ARKTIME"}.mean()
         let query = metricConfig.query;
         if (params.dimensionFilter) {
-            // Insert dimension filter before the interval bracket
-            // e.g., "CpuUtilization[1m].mean()" -> "CpuUtilization{resourceDisplayName = "value"}[1m].mean()"
+            // Insert dimension filter after the interval bracket, before the aggregation
+            // e.g., "CpuUtilization[1m].mean()" -> "CpuUtilization[1m]{resourceDisplayName = "value"}.mean()"
             query = query.replace(
-                /^(\w+)\[/,
-                `$1{${params.dimensionFilter.key} = "${params.dimensionFilter.value}"}[`
+                /(\[\d+\w*\])(\.)/,
+                `$1{${params.dimensionFilter.key} = "${params.dimensionFilter.value}"}$2`
             );
         }
 

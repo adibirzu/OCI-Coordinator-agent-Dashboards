@@ -67,6 +67,41 @@ interface TraceListResponse {
     };
 }
 
+// Filter types for advanced filtering
+type FilterOperator = '=' | '!=' | '>' | '<' | '>=' | '<=' | 'contains';
+
+interface TagFilter {
+    key: string;
+    value: string | number;
+    operator: FilterOperator;
+}
+
+// Determine if a value should be treated as numeric
+function isNumericValue(value: string | number): boolean {
+    if (typeof value === 'number') return true;
+    const parsed = parseFloat(value);
+    return !isNaN(parsed) && isFinite(parsed);
+}
+
+// Get available operators based on value type
+function getOperatorsForValue(value: string | number): FilterOperator[] {
+    if (isNumericValue(value)) {
+        return ['=', '!=', '>', '<', '>=', '<='];
+    }
+    return ['=', '!=', 'contains'];
+}
+
+// Operator display labels
+const OPERATOR_LABELS: Record<FilterOperator, string> = {
+    '=': '=',
+    '!=': '≠',
+    '>': '>',
+    '<': '<',
+    '>=': '≥',
+    '<=': '≤',
+    'contains': '∋'
+};
+
 // Helper functions
 function formatDuration(ms: number): string {
     if (ms < 1) return '<1ms';
@@ -271,11 +306,106 @@ function SpanRow({ span, depth, traceStartTime, traceDuration, isExpanded, onTog
     );
 }
 
+// Filter Attribute Popup - appears when clicking a tag to select operator
+interface FilterPopupState {
+    key: string;
+    value: string | number;
+    position: { x: number; y: number };
+}
+
+interface FilterAttributePopupProps {
+    filter: FilterPopupState;
+    onApply: (key: string, value: string | number, operator: FilterOperator) => void;
+    onClose: () => void;
+}
+
+function FilterAttributePopup({ filter, onApply, onClose }: FilterAttributePopupProps) {
+    const operators = getOperatorsForValue(filter.value);
+
+    // Close on escape key
+    React.useEffect(() => {
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onClose();
+        };
+        window.addEventListener('keydown', handleEscape);
+        return () => window.removeEventListener('keydown', handleEscape);
+    }, [onClose]);
+
+    // Close on click outside
+    React.useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+            if (!target.closest(`.${styles.filterPopup}`)) {
+                onClose();
+            }
+        };
+        // Delay to prevent immediate close from the click that opened it
+        const timer = setTimeout(() => {
+            window.addEventListener('click', handleClickOutside);
+        }, 100);
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('click', handleClickOutside);
+        };
+    }, [onClose]);
+
+    return (
+        <div
+            className={styles.filterPopup}
+            style={{
+                left: Math.min(filter.position.x, window.innerWidth - 220),
+                top: Math.min(filter.position.y, window.innerHeight - 200)
+            }}
+        >
+            <div className={styles.filterPopupHeader}>
+                <span className={styles.filterPopupTitle}>Filter by attribute</span>
+                <button className={styles.filterPopupClose} onClick={onClose}>×</button>
+            </div>
+            <div className={styles.filterPopupContent}>
+                <div className={styles.filterPopupAttribute}>
+                    <span className={styles.filterPopupKey}>{filter.key}</span>
+                    <span className={styles.filterPopupValue}>{String(filter.value)}</span>
+                </div>
+                <div className={styles.filterPopupOperators}>
+                    <span className={styles.filterPopupLabel}>Select operator:</span>
+                    <div className={styles.filterPopupButtons}>
+                        {operators.map(op => (
+                            <button
+                                key={op}
+                                className={styles.filterPopupOperatorBtn}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    console.log('Applying filter:', filter.key, op, filter.value);
+                                    onApply(filter.key, filter.value, op);
+                                    onClose();
+                                }}
+                                title={`${filter.key} ${OPERATOR_LABELS[op]} ${filter.value}`}
+                            >
+                                <span className={styles.filterPopupOpSymbol}>{OPERATOR_LABELS[op]}</span>
+                                <span className={styles.filterPopupOpLabel}>
+                                    {op === '=' ? 'equals' :
+                                     op === '!=' ? 'not equals' :
+                                     op === '>' ? 'greater than' :
+                                     op === '<' ? 'less than' :
+                                     op === '>=' ? 'at least' :
+                                     op === '<=' ? 'at most' :
+                                     'contains'}
+                                </span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 // Span Detail Panel
 interface SpanDetailPanelProps {
     span: SpanDetail;
     onClose: () => void;
-    onTagClick?: (key: string, value: string) => void;
+    onTagClick?: (key: string, value: string, event: React.MouseEvent) => void;
 }
 
 function SpanDetailPanel({ span, onClose, onTagClick }: SpanDetailPanelProps) {
@@ -380,8 +510,8 @@ function SpanDetailPanel({ span, onClose, onTagClick }: SpanDetailPanelProps) {
                                     {onTagClick ? (
                                         <button
                                             className={styles.tagValueClickable}
-                                            onClick={() => onTagClick(key, String(value))}
-                                            title={`Filter by ${key}:${String(value)}`}
+                                            onClick={(e) => onTagClick(key, String(value), e)}
+                                            title={`Click to filter by ${key}`}
                                         >
                                             {String(value)}
                                         </button>
@@ -539,16 +669,34 @@ export function TraceViewer({ instanceId, instanceName }: TraceViewerProps) {
     const [statusFilter, setStatusFilter] = useState('');
     const [serviceFilter, setServiceFilter] = useState('');
 
-    // Tag-based filtering (Datadog-style drilldown)
-    const [tagFilters, setTagFilters] = useState<Record<string, string>>({});
+    // Tag-based filtering (Datadog-style drilldown with operators)
+    const [tagFilters, setTagFilters] = useState<TagFilter[]>([]);
+
+    // Filter popup state - shows when clicking a tag value
+    const [filterPopup, setFilterPopup] = useState<FilterPopupState | null>(null);
+
+    // Show the filter popup when clicking a tag
+    const showFilterPopup = useCallback((key: string, value: string, event: React.MouseEvent) => {
+        event.stopPropagation();
+        setFilterPopup({
+            key,
+            value: isNumericValue(value) ? parseFloat(value) : value,
+            position: { x: event.clientX, y: event.clientY }
+        });
+    }, []);
+
+    // Close the filter popup
+    const closeFilterPopup = useCallback(() => {
+        setFilterPopup(null);
+    }, []);
 
     // Add a tag filter when clicking on a tag value
     // Map known tags to existing filters for server-side filtering
-    const addTagFilter = useCallback((key: string, value: string) => {
+    const addTagFilter = useCallback((key: string, value: string | number, operator: FilterOperator = '=') => {
         // Map service-related tags to the service filter dropdown
         const serviceKeys = ['service.name', 'serviceName', 'service_name'];
         if (serviceKeys.includes(key)) {
-            setServiceFilter(value);
+            setServiceFilter(String(value));
             return;
         }
 
@@ -561,27 +709,41 @@ export function TraceViewer({ instanceId, instanceName }: TraceViewerProps) {
                 'success': 'success',
                 'error': 'error'
             };
-            const mappedStatus = statusMap[value] || '';
+            const mappedStatus = statusMap[String(value)] || '';
             setStatusFilter(mappedStatus);
             return;
         }
 
         // For other tags, add to tag filters (for trace-level matching)
-        setTagFilters(prev => ({ ...prev, [key]: value }));
+        // Check if a filter with the same key already exists
+        setTagFilters(prev => {
+            const existingIndex = prev.findIndex(f => f.key === key);
+            if (existingIndex >= 0) {
+                // Replace existing filter for the same key
+                const newFilters = [...prev];
+                newFilters[existingIndex] = { key, value, operator };
+                return newFilters;
+            }
+            // Add new filter
+            return [...prev, { key, value, operator }];
+        });
+    }, []);
+
+    // Update operator for an existing filter
+    const updateFilterOperator = useCallback((key: string, newOperator: FilterOperator) => {
+        setTagFilters(prev => prev.map(f =>
+            f.key === key ? { ...f, operator: newOperator } : f
+        ));
     }, []);
 
     // Remove a tag filter
     const removeTagFilter = useCallback((key: string) => {
-        setTagFilters(prev => {
-            const next = { ...prev };
-            delete next[key];
-            return next;
-        });
+        setTagFilters(prev => prev.filter(f => f.key !== key));
     }, []);
 
     // Clear all tag filters
     const clearTagFilters = useCallback(() => {
-        setTagFilters({});
+        setTagFilters([]);
     }, []);
 
     // Trace ID search
@@ -688,18 +850,52 @@ export function TraceViewer({ instanceId, instanceName }: TraceViewerProps) {
         return Array.from(services).filter(Boolean);
     }, [traces]);
 
-    // Filter traces by tag filters (Datadog-style drilldown)
+    // Filter traces by tag filters (Datadog-style drilldown with operators)
     // Note: Since TraceSummary only has limited attributes, we filter by available fields
     // Service/status tags are mapped to dropdown filters in addTagFilter
     const filteredTraces = useMemo(() => {
-        const filterEntries = Object.entries(tagFilters);
-        if (filterEntries.length === 0) {
+        if (tagFilters.length === 0) {
             return traces;
         }
 
+        // Helper to apply comparison operator
+        const applyOperator = (
+            traceValue: string | number | undefined,
+            filterValue: string | number,
+            operator: FilterOperator
+        ): boolean => {
+            if (traceValue === undefined) return true; // Can't filter if no value
+
+            const traceStr = String(traceValue);
+            const filterStr = String(filterValue);
+
+            // For numeric comparisons
+            if (operator !== '=' && operator !== '!=' && operator !== 'contains') {
+                const traceNum = parseFloat(traceStr);
+                const filterNum = parseFloat(filterStr);
+                if (!isNaN(traceNum) && !isNaN(filterNum)) {
+                    switch (operator) {
+                        case '>': return traceNum > filterNum;
+                        case '<': return traceNum < filterNum;
+                        case '>=': return traceNum >= filterNum;
+                        case '<=': return traceNum <= filterNum;
+                    }
+                }
+                return true; // Can't compare non-numeric values with numeric operators
+            }
+
+            // String comparisons
+            switch (operator) {
+                case '=': return traceStr === filterStr;
+                case '!=': return traceStr !== filterStr;
+                case 'contains': return traceStr.toLowerCase().includes(filterStr.toLowerCase());
+                default: return true;
+            }
+        };
+
         return traces.filter(trace => {
             // Match tag filters against trace-level attributes
-            return filterEntries.every(([key, value]) => {
+            return tagFilters.every(({ key, value, operator }) => {
                 // Map tag keys to TraceSummary fields
                 const traceValueMap: Record<string, string | number> = {
                     'operation.name': trace.rootSpanOperationName,
@@ -707,16 +903,13 @@ export function TraceViewer({ instanceId, instanceName }: TraceViewerProps) {
                     'span.name': trace.rootSpanOperationName,
                     'trace.status': trace.traceStatus,
                     'error.type': trace.traceErrorType,
+                    'duration': trace.rootSpanDurationInMs,
+                    'spanCount': trace.spanCount,
+                    'errorSpanCount': trace.errorSpanCount,
                 };
 
                 const traceValue = traceValueMap[key];
-                if (traceValue !== undefined) {
-                    return String(traceValue) === value;
-                }
-
-                // For unmapped tags, we can't filter at trace level
-                // These will be shown as "active but not filterable" in the UI
-                return true;
+                return applyOperator(traceValue, value, operator);
             });
         });
     }, [traces, tagFilters]);
@@ -853,13 +1046,23 @@ export function TraceViewer({ instanceId, instanceName }: TraceViewerProps) {
             </div>
 
             {/* Active Tag Filters */}
-            {Object.keys(tagFilters).length > 0 && (
+            {tagFilters.length > 0 && (
                 <div className={styles.activeTagFilters}>
                     <span className={styles.tagFiltersLabel}>Active Filters:</span>
-                    {Object.entries(tagFilters).map(([key, value]) => (
+                    {tagFilters.map(({ key, value, operator }) => (
                         <span key={key} className={styles.tagFilterChip}>
-                            <span className={styles.tagFilterKey}>{key}:</span>
-                            <span className={styles.tagFilterValue}>{value}</span>
+                            <span className={styles.tagFilterKey}>{key}</span>
+                            <select
+                                className={styles.tagFilterOperator}
+                                value={operator}
+                                onChange={(e) => updateFilterOperator(key, e.target.value as FilterOperator)}
+                                title="Change comparison operator"
+                            >
+                                {getOperatorsForValue(value).map(op => (
+                                    <option key={op} value={op}>{OPERATOR_LABELS[op]}</option>
+                                ))}
+                            </select>
+                            <span className={styles.tagFilterValue}>{String(value)}</span>
                             <button
                                 className={styles.tagFilterRemove}
                                 onClick={() => removeTagFilter(key)}
@@ -887,7 +1090,7 @@ export function TraceViewer({ instanceId, instanceName }: TraceViewerProps) {
                 <div className={`${styles.traceList} ${selectedTrace ? styles.traceListNarrow : ''}`}>
                     <div className={styles.traceListHeader}>
                         <span className={styles.traceListTitle}>
-                            Traces ({Object.keys(tagFilters).length > 0 ? `${filteredTraces.length}/${traces.length}` : traces.length})
+                            Traces ({tagFilters.length > 0 ? `${filteredTraces.length}/${traces.length}` : traces.length})
                         </span>
                     </div>
                     {traces.length === 0 ? (
@@ -1047,7 +1250,16 @@ export function TraceViewer({ instanceId, instanceName }: TraceViewerProps) {
                     <SpanDetailPanel
                         span={selectedSpan}
                         onClose={() => setSelectedSpan(null)}
-                        onTagClick={addTagFilter}
+                        onTagClick={showFilterPopup}
+                    />
+                )}
+
+                {/* Filter Popup - appears when clicking a tag */}
+                {filterPopup && (
+                    <FilterAttributePopup
+                        filter={filterPopup}
+                        onApply={addTagFilter}
+                        onClose={closeFilterPopup}
                     />
                 )}
             </div>

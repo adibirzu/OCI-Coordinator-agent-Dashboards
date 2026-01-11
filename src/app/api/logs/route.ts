@@ -130,10 +130,13 @@ async function fetchFromOCI(params: {
         const endTime = new Date();
 
         // OCI Logging Search uses SQL-like syntax, NOT pipe-delimited Log Analytics syntax
-        // Base search query - search within the configured log group
+        // Base search query - search within the compartment (required), filtering by log group
         // Note: Filtering by agent/level/search is done client-side after fetching
         // because OCI Logging Search has limited query syntax compared to Log Analytics
-        const searchQuery = `search "${LOG_GROUP_ID}"`;
+        // The search query must reference the log group OCID to filter logs
+        const searchQuery = LOG_GROUP_ID
+            ? `search "${COMPARTMENT_ID}/${LOG_GROUP_ID}"`
+            : `search "${COMPARTMENT_ID}"`;
 
         const searchRequest: loggingsearch.requests.SearchLogsRequest = {
             searchLogsDetails: {

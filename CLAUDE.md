@@ -64,6 +64,15 @@ These routes call OCI APIs directly (requires OCI credentials):
 - `/api/oci/apm` - OCI Monitoring metrics
 - `/api/oci/logging` - OCI Log Search
 
+### APM Traces API
+The `/api/apm/traces` endpoint queries OCI APM Trace Explorer directly:
+- **Direct HTTP requests** - Bypasses OCI TypeScript SDK v2.122.2 date serialization bug
+- Uses `DefaultRequestSigner` for OCI request signing
+- Query format: `show (traces) TraceStatus as Status, ServiceName as Service, ...`
+- Response parsing: `response.queryResultRows` (not SDK-style nested structure)
+
+**Known Issue (Fixed):** The OCI SDK incorrectly serializes dates (local time with Z suffix, no hour zero-padding). The fix uses `queryApmDirect()` with proper ISO date formatting via `Date.toISOString()`.
+
 ## Environment Variables
 
 ```bash

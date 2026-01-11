@@ -1,10 +1,85 @@
 import { NextResponse } from 'next/server';
-import * as apmtraces from 'oci-apmtraces';
-import * as common from 'oci-common';
 import { getProvider } from '@/lib/oci-auth';
+import { DefaultRequestSigner, HttpRequest } from 'oci-common';
+import { createHash } from 'crypto';
 
 const APM_DOMAIN_ID = process.env.OCI_APM_DOMAIN_ID;
 const REGION = process.env.OCI_APM_REGION || 'eu-frankfurt-1';
+
+// Direct HTTP request to APM API to bypass SDK date serialization bug
+// The SDK incorrectly serializes dates (local time with Z suffix, no hour padding)
+async function queryApmDirect(params: {
+    apmDomainId: string;
+    startTime: Date;
+    endTime: Date;
+    limit: number;
+    queryText: string;
+}): Promise<any> {
+    const provider = getProvider();
+    const signer = new DefaultRequestSigner(provider);
+
+    // Build URL with properly formatted ISO dates
+    const host = `apm-trace.${REGION}.oci.oraclecloud.com`;
+    const baseUrl = `https://${host}`;
+    const path = '/20200630/queries/actions/runQuery';
+    const queryParams = new URLSearchParams({
+        apmDomainId: params.apmDomainId,
+        limit: params.limit.toString(),
+        timeSpanStartedGreaterThanOrEqualTo: params.startTime.toISOString(),
+        timeSpanStartedLessThan: params.endTime.toISOString()
+    });
+
+    const fullUrl = `${baseUrl}${path}?${queryParams.toString()}`;
+    const body = JSON.stringify({
+        queryText: params.queryText
+    });
+
+    // Compute SHA256 hash of the body for OCI request signing
+    const bodyHash = createHash('sha256').update(body, 'utf8').digest('base64');
+
+    // Create OCI HTTP request for signing
+    // OCI signing requires: host, date, x-content-sha256, content-type, content-length
+    // IMPORTANT: HttpRequest.headers must be native Headers class, not Map
+    const requestHeaders = new Headers();
+    requestHeaders.set('host', host);
+    requestHeaders.set('content-type', 'application/json');
+    requestHeaders.set('content-length', Buffer.byteLength(body, 'utf8').toString());
+    requestHeaders.set('x-content-sha256', bodyHash);
+    requestHeaders.set('accept', 'application/json');
+
+    const httpRequest: HttpRequest = {
+        uri: fullUrl,
+        method: 'POST',
+        headers: requestHeaders,
+        body: body
+    };
+
+    // Sign the request with OCI credentials
+    await signer.signHttpRequest(httpRequest);
+
+    // Convert signed headers to plain object for fetch
+    const headers: Record<string, string> = {};
+    httpRequest.headers.forEach((value, key) => {
+        headers[key] = value;
+    });
+
+    console.log('APM Direct Request URL:', fullUrl);
+
+    // Make the actual HTTP request
+    const response = await fetch(fullUrl, {
+        method: 'POST',
+        headers: headers,
+        body: body
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error('APM Direct Request failed:', response.status, errorText);
+        throw new Error(`APM API error: ${response.status} - ${errorText}`);
+    }
+
+    return response.json();
+}
 
 // Trace cache - stores trace list with TTL
 interface TraceCacheEntry {
@@ -123,92 +198,130 @@ export async function GET(request: Request) {
     }
 
     try {
-        const provider = getProvider();
-        const client = new apmtraces.QueryClient({
-            authenticationDetailsProvider: provider
-        });
-        client.region = common.Region.fromRegionId(REGION);
-
         // Build time range
         const endTime = new Date();
         const startTime = new Date(endTime.getTime() - hoursBack * 3600 * 1000);
 
-        // First, get example queries to understand the correct format
-        // Then run the query for traces
-
-        // Use listQuickPicks to get example queries - this tells us the correct APM query syntax
-        const quickPicksRequest: apmtraces.requests.ListQuickPicksRequest = {
-            apmDomainId: APM_DOMAIN_ID
-        };
-
-        let exampleQueries: string[] = [];
-        try {
-            const quickPicksResponse = await client.listQuickPicks(quickPicksRequest);
-            exampleQueries = (quickPicksResponse.items || []).map((item: any) => item.quickPickQuery || '');
-            console.log('APM Quick Picks (example queries):', exampleQueries.slice(0, 3));
-        } catch (qpError: any) {
-            console.log('Could not fetch quick picks:', qpError.message);
-        }
-
-        // OCI APM Query Language requires proper syntax:
-        // show (traces) column1, column2, ... [WHERE conditions]
+        // OCI APM Query Language:
         // Reference: https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/monitor-traces-trace-explorer.html
-        // Column names use PascalCase and must match OCI APM schema exactly
-        // Standard columns: TraceStatus, TraceFirstSpanStartTime, ServiceName, OperationName, TraceDuration, ErrorCount
-        const queryText = 'show (traces) TraceStatus, TraceFirstSpanStartTime, ServiceName, OperationName, TraceDuration, ErrorCount';
+        // Key syntax rules:
+        // - SHOW clause WITH parentheses: show (traces) or show (spans)
+        // - Must include column selections after show (traces)
+        // - Time range is passed via API parameters, not in query
+        // - Limit is passed via request parameter, not in query text
+        // Column names must match OCI APM schema exactly (case-sensitive):
+        //   TraceDuration (microseconds), not TraceDurationInMs
+        //   ErrorCount, not ErrorSpanCount
+        const queryText = 'show (traces) TraceStatus as Status, ServiceName as Service, OperationName as Operation, TraceDuration as Duration, SpanCount as Spans, ErrorCount as Errors';
 
         console.log('APM Query:', queryText);
         console.log('APM Time range:', startTime.toISOString(), 'to', endTime.toISOString());
 
-        const queryRequest: apmtraces.requests.QueryRequest = {
+        // Use direct HTTP request to bypass OCI SDK date serialization bug
+        // The SDK incorrectly formats dates (local time with Z suffix, no hour zero-padding)
+        const response = await queryApmDirect({
             apmDomainId: APM_DOMAIN_ID,
-            timeSpanStartedGreaterThanOrEqualTo: startTime,
-            timeSpanStartedLessThan: endTime,
+            startTime: startTime,
+            endTime: endTime,
             limit: limit,
-            queryDetails: {
-                queryText: queryText
-            }
-        };
-
-        const response = await client.query(queryRequest);
+            queryText: queryText
+        });
         console.log('APM Query Response keys:', Object.keys(response));
 
-        // Debug: Log first row structure to understand response format
-        const firstRow = response.queryResultResponse?.queryResultRows?.[0];
-        if (firstRow) {
+        // Log any warnings from the API
+        if (response.queryResultWarnings?.length > 0) {
+            console.log('APM Query Warnings:', response.queryResultWarnings);
+        }
+
+        // Direct HTTP response has queryResultRows at top level (not nested under queryResultResponse like SDK)
+        const rows = response.queryResultRows || [];
+        console.log('APM Query returned', rows.length, 'rows');
+        if (rows.length > 0) {
+            const firstRow = rows[0];
+            console.log('APM First row keys:', Object.keys(firstRow.queryResultRowData || {}));
             console.log('APM First row data:', JSON.stringify(firstRow.queryResultRowData));
-            console.log('APM First row metadata:', JSON.stringify(firstRow.queryResultRowMetadata));
-        } else {
-            console.log('APM Query returned no rows');
         }
 
         // Transform response to our format
-        // OCI APM response structure: queryResultRowData contains fields, queryResultRowMetadata contains trace_id
+        // Direct HTTP response structure: queryResultRowData contains fields, queryResultRowMetadata contains trace_id
+        // Column names from "show (traces)" use various naming conventions - try multiple variants
 
-        let traces: TraceSummary[] = (response.queryResultResponse?.queryResultRows || []).map((row: any) => {
+        let traces: TraceSummary[] = (response.queryResultRows || []).map((row: any) => {
             const data = row.queryResultRowData || {};
             const metadata = row.queryResultRowMetadata || {};
 
-            // Column names match the query: TraceStatus, TraceFirstSpanStartTime, ServiceName,
-            // OperationName, TraceDuration, ErrorCount
-            // OCI APM TraceDuration is in microseconds, convert to milliseconds
-            const startTimeValue = data.TraceFirstSpanStartTime || data['TraceFirstSpanStartTime'] || Date.now();
-            const durationMicros = data.TraceDuration || data['TraceDuration'] || 0;
-            const durationMs = durationMicros / 1000; // Convert microseconds to milliseconds
+            // Helper to get value trying multiple key variants
+            const getValue = (keys: string[], defaultVal: any = null) => {
+                for (const key of keys) {
+                    if (data[key] !== undefined && data[key] !== null) return data[key];
+                }
+                return defaultVal;
+            };
+
+            // Try various column name formats (OCI APM uses different conventions)
+            const startTimeValue = getValue([
+                'traceFirstSpanStartTime', 'TraceFirstSpanStartTime',
+                'timeEarliestSpanStarted', 'TimeEarliestSpanStarted',
+                'startTime', 'StartTime'
+            ], Date.now());
+
+            const durationValue = getValue([
+                'traceDurationInMs', 'TraceDurationInMs',
+                'traceDuration', 'TraceDuration',
+                'rootSpanDurationInMs', 'RootSpanDurationInMs',
+                'duration', 'Duration'
+            ], 0);
+
+            // Duration could be in microseconds or milliseconds depending on the source
+            const durationMs = durationValue > 1000000 ? durationValue / 1000 : durationValue;
+
             const traceStartTime = new Date(startTimeValue);
             const traceEndTime = new Date(traceStartTime.getTime() + durationMs);
-            const errorCount = data.ErrorCount || data['ErrorCount'] || 0;
+
+            const errorCount = getValue([
+                'errorSpanCount', 'ErrorSpanCount',
+                'errorCount', 'ErrorCount',
+                'errors', 'Errors'
+            ], 0);
+
+            const spanCount = getValue([
+                'spanCount', 'SpanCount',
+                'numberOfSpans', 'NumberOfSpans'
+            ], 1);
+
+            const serviceName = getValue([
+                'rootSpanServiceName', 'RootSpanServiceName',
+                'serviceName', 'ServiceName',
+                'service', 'Service'
+            ], 'unknown');
+
+            const operationName = getValue([
+                'rootSpanOperationName', 'RootSpanOperationName',
+                'operationName', 'OperationName',
+                'operation', 'Operation'
+            ], 'unknown');
+
+            const traceStatus = getValue([
+                'traceStatus', 'TraceStatus',
+                'status', 'Status'
+            ], 'OK');
+
+            const traceKey = metadata.trace_id || getValue([
+                'traceKey', 'TraceKey',
+                'traceId', 'TraceId',
+                'id', 'Id'
+            ], 'unknown');
 
             return {
-                traceKey: metadata.trace_id || data.TraceId || 'unknown',
-                rootSpanServiceName: data.ServiceName || data['ServiceName'] || 'unknown',
-                rootSpanOperationName: data.OperationName || data['OperationName'] || 'unknown',
+                traceKey,
+                rootSpanServiceName: serviceName,
+                rootSpanOperationName: operationName,
                 timeEarliestSpanStarted: traceStartTime.toISOString(),
                 timeLatestSpanEnded: traceEndTime.toISOString(),
                 rootSpanDurationInMs: durationMs,
-                traceStatus: data.TraceStatus || data['TraceStatus'] || 'OK',
+                traceStatus,
                 traceErrorType: errorCount > 0 ? 'ERROR' : '',
-                spanCount: 1, // Not available in this query, will be fetched in drilldown
+                spanCount,
                 errorSpanCount: errorCount,
                 serviceSummaries: []
             };

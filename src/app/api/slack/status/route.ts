@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
-const COORDINATOR_URL = process.env.COORDINATOR_URL || 'http://127.0.0.1:8001';
+// Slack status is served by the Coordinator API (port 3001), not the MCP server (port 8001)
+const COORDINATOR_API_URL = process.env.COORDINATOR_API_URL || 'http://127.0.0.1:3001';
 
 const OFFLINE_STATUS = {
     status: 'disconnected',
@@ -9,7 +10,7 @@ const OFFLINE_STATUS = {
 
 export async function GET() {
     try {
-        const res = await fetch(`${COORDINATOR_URL}/slack/status`, {
+        const res = await fetch(`${COORDINATOR_API_URL}/slack/status`, {
             cache: 'no-store'
         });
 

@@ -1,0 +1,717 @@
+/* LangGraph Workflow Visualizer - Enhanced Styles */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.headerLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin: 0;
+}
+
+.titleIcon {
+    font-size: 22px;
+}
+
+.subtitle {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.headerControls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* View Mode Toggle */
+.viewModeToggle {
+    display: flex;
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.viewModeBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: transparent;
+    color: #94a3b8;
+}
+
+.viewModeBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f1f5f9;
+}
+
+.viewModeBtnActive {
+    background: #4f46e5;
+    color: white;
+}
+
+/* Route Filter */
+.routeFilter {
+    display: flex;
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.routeBtn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: transparent;
+    color: #94a3b8;
+}
+
+.routeBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f1f5f9;
+}
+
+.routeBtnActive {
+    background: rgba(79, 70, 229, 0.3);
+    color: #818cf8;
+}
+
+/* Refresh Button */
+.refreshBtn {
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.refreshBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f1f5f9;
+}
+
+.refreshBtnLoading {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Main Content */
+.mainContent {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 16px;
+    padding: 16px;
+    overflow: hidden;
+    min-height: 0;
+}
+
+@media (max-width: 1200px) {
+    .mainContent {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(400px, 1fr) auto;
+    }
+}
+
+/* Diagram Panel */
+.diagramPanel {
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    min-height: 0;
+}
+
+.diagramContainer {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    min-height: 400px;
+    overflow: auto;
+}
+
+.diagramContainer svg {
+    max-width: 100%;
+    height: auto;
+    filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3));
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 14px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-wrap: wrap;
+}
+
+.legendSection {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.legendTitle {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.legendDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.legendBadge {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: white;
+}
+
+.connectionStatus {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.connectionDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.connectionOffline {
+    background: #ef4444;
+}
+
+/* Sidebar */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+/* Card */
+.card {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 13px;
+    font-weight: 600;
+    color: #f1f5f9;
+}
+
+.cardBody {
+    padding: 12px;
+}
+
+.closeBtn {
+    margin-left: auto;
+    padding: 2px 8px;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+.closeBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f1f5f9;
+}
+
+/* Node Detail Panel */
+.nodeDetailSection {
+    margin-bottom: 12px;
+}
+
+.nodeDetailLabel {
+    font-size: 10px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.nodeDetailValue {
+    font-size: 13px;
+    color: #e2e8f0;
+    line-height: 1.4;
+}
+
+.nodeDetailCode {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #818cf8;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 6px 8px;
+    border-radius: 4px;
+}
+
+.nodeDetailGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.operationsList {
+    margin: 0;
+    padding-left: 16px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.operationsList li {
+    margin-bottom: 4px;
+}
+
+.metricsRow {
+    display: flex;
+    gap: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.metric {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.metricLabel {
+    font-size: 10px;
+    color: #64748b;
+    text-transform: uppercase;
+}
+
+.metricValue {
+    font-size: 14px;
+    font-weight: 600;
+    color: #10b981;
+}
+
+/* Stages */
+.stageSection {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.stageSection:last-child {
+    border-bottom: none;
+}
+
+.stageHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.stageDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.stageName {
+    font-size: 13px;
+    font-weight: 600;
+    color: #f1f5f9;
+}
+
+.stageDescription {
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+
+.stageNodes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.stageNodeBtn {
+    padding: 6px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.2);
+    color: #94a3b8;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.stageNodeBtn:hover {
+    background: rgba(79, 70, 229, 0.2);
+    border-color: rgba(79, 70, 229, 0.4);
+    color: #f1f5f9;
+}
+
+.stageNodeBtnActive {
+    background: rgba(79, 70, 229, 0.3);
+    border-color: #4f46e5;
+    color: #f1f5f9;
+}
+
+/* Agent Grid */
+.agentGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.agentCard {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    border-left: 3px solid;
+    transition: all 0.2s ease;
+}
+
+.agentCard:hover {
+    background: rgba(0, 0, 0, 0.3);
+    transform: translateX(4px);
+}
+
+.agentIcon {
+    font-size: 20px;
+}
+
+.agentInfo {
+    flex: 1;
+}
+
+.agentName {
+    font-size: 12px;
+    font-weight: 600;
+    color: #f1f5f9;
+}
+
+.agentDomain {
+    font-size: 10px;
+    color: #64748b;
+}
+
+/* Message Flow */
+.messageFlowList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.messageFlowItem {
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.messageFlowArrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.messageFlowFrom,
+.messageFlowTo {
+    font-size: 11px;
+    font-weight: 600;
+    color: #818cf8;
+    padding: 2px 6px;
+    background: rgba(129, 140, 248, 0.1);
+    border-radius: 4px;
+}
+
+.messageFlowIcon {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.messageFlowMessage {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.messageFlowCondition {
+    font-size: 10px;
+    color: #64748b;
+    font-style: italic;
+    margin-top: 4px;
+}
+
+/* Example Queries */
+.exampleList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.exampleItem {
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.exampleItem:hover {
+    border-color: rgba(79, 70, 229, 0.4);
+    transform: translateX(4px);
+}
+
+.exampleQuery {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #818cf8;
+    margin-bottom: 6px;
+}
+
+.exampleDescription {
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+.exampleBadge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    color: white;
+    font-weight: 500;
+}
+
+/* Loading States */
+.loading,
+.loadingFull {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 200px;
+    color: #64748b;
+}
+
+.loadingFull {
+    flex: 1;
+    min-height: 400px;
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #4f46e5;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Error State */
+.error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 200px;
+    color: #ef4444;
+    text-align: center;
+}
+
+.errorIcon {
+    font-size: 32px;
+}
+
+/* Render Error */
+.renderError {
+    padding: 20px;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    max-width: 600px;
+}
+
+.renderErrorTitle {
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #f87171;
+}
+
+.renderErrorCode {
+    font-size: 10px;
+    overflow: auto;
+    max-height: 200px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 4px;
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Empty State */
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: #64748b;
+    gap: 8px;
+}
+
+.emptyIcon {
+    font-size: 28px;
+    opacity: 0.5;
+}
+
+/* Scrollbar */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.diagramContainer::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.diagramContainer::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.diagramContainer::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .headerControls {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .viewModeToggle,
+    .routeFilter {
+        flex-wrap: wrap;
+    }
+
+    .mainContent {
+        grid-template-columns: 1fr;
+    }
+
+    .nodeDetailGrid {
+        grid-template-columns: 1fr;
+    }
+}

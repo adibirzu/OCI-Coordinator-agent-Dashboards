@@ -24,6 +24,7 @@
     "@types/react-grid-layout": "^1.3.6",
     "chart.js": "^4.5.1",
     "dagre": "^0.8.5",
+    "mermaid": "^11.12.2",
     "next": "16.1.1",
     "oci-apmconfig": "^2.122.2",
     "oci-apmtraces": "^2.122.2",

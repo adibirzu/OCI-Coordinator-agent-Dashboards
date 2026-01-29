@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 import { TraceViewer } from '@/components/observability/TraceViewer';
 import { ApmMetrics } from '@/components/observability/ApmMetrics';
 import { InstanceSelector } from '@/components/observability/InstanceSelector';
+import { LangGraphVisualizer } from '@/components/observability/LangGraphVisualizer';
 import styles from './page.module.css';
 
-type ViewMode = 'traces' | 'metrics' | 'both';
+type ViewMode = 'traces' | 'metrics' | 'both' | 'workflow';
 
 interface Instance {
     id: string;
@@ -61,6 +62,13 @@ export default function ObservabilityPage() {
                         <span className={styles.toggleIcon}>◔</span>
                         Metrics Only
                     </button>
+                    <button
+                        className={`${styles.toggleBtn} ${viewMode === 'workflow' ? styles.active : ''}`}
+                        onClick={() => setViewMode('workflow')}
+                    >
+                        <span className={styles.toggleIcon}>🔄</span>
+                        Workflow
+                    </button>
                 </div>
             </header>
 
@@ -105,6 +113,12 @@ export default function ObservabilityPage() {
                             instanceId={selectedInstance?.id}
                             instanceName={selectedInstance?.displayName}
                         />
+                    </div>
+                )}
+
+                {viewMode === 'workflow' && (
+                    <div className={styles.fullLayout}>
+                        <LangGraphVisualizer />
                     </div>
                 )}
             </main>
